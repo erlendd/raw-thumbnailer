@@ -1,6 +1,6 @@
 raw_thumbnailerdir=$(bindir)
 raw_thumbnailer_PROGRAMS=raw-thumbnailer
-raw_thumbnailer_SOURCES=main.cpp
+raw_thumbnailer_SOURCES=main.c
 
 INCLUDES = $(OPENRAW_CFLAGS)      \
            $(OPENRAWGNOME_CFLAGS) \

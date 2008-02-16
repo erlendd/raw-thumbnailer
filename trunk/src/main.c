@@ -19,13 +19,13 @@
 
 
 
-#include <iostream>
+//#include <iostream>
 #include <libopenraw/libopenraw.h>
 //#include <libopenraw/debug.h>
 #include <libopenraw-gnome/gdkpixbuf.h>
 
 
-bool save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
+int save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
 {
 	GdkPixbuf *small = NULL;
 	GError *err = NULL;
@@ -41,10 +41,9 @@ bool save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
 		new_height = size;
 		new_width = size * width / height;
 	}
-	//std::cout << "About to scale image from original "<<width<<"x"<<height<<" to "<<new_width<<"x"<<new_height << std::endl;
 	small = gdk_pixbuf_scale_simple (pixbuf, new_width, new_height, GDK_INTERP_TILES);
 	if(!small) {
-		std::cerr << "Error resizing image (memory?)" << std::endl;
+	  fprintf(stderr,"Error resizing image (memory?)\n");
 	}
 		
 	a_width = g_strdup_printf ("%d", width);
@@ -56,25 +55,25 @@ bool save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
 			g_print ("ERROR: Couldn't write the thumbnail '%s': %s\n", path, err->message);
 			g_error_free (err);
 			gdk_pixbuf_unref (small);
-			return false;
+			return 1;
 		} else {
 			g_print ("ERROR: Couldn't write the thumbnail '%s'\n", path);
 			gdk_pixbuf_unref (small);
-			return false;
+			return 1;
 		}
 	}
 	gdk_pixbuf_unref (small);
-	return true;
+	return 0;
 }
 
 void printUsage()
 {
-	std::cout << "Usage: rawthumbnailer [options]" << std::endl << std::endl
-	 << "Options:" << std::endl
-	 << "  -i<s>  : input file" << std::endl
-	 << "  -o<s>  : output file" << std::endl
-	 << "  -s<n>  : thumbnail size (default: 128)" << std::endl
-	 << "  -h     : display this help" << std::endl;
+	printf("Usage: rawthumbnailer [options] \n\n");
+	printf("Options: \n");
+	printf(" -i<s> : input file \n");
+	printf(" -o<s> : output file \n");
+	printf(" -s<n> : thumbnail size (default: 128) \n");
+	printf(" -h     : display this help \n");
 }
 
 int main(int argc, char** argv)
@@ -84,7 +83,7 @@ int main(int argc, char** argv)
 	const char* inputFile = NULL;
 	const char* outputFile = NULL;
 
-	while ((option = getopt (argc, argv, "i:o:s:h")) != -1)
+	while ((option = getopt (argc, argv, "i:o:s:r:h")) != -1)
 	{
 		switch (option)
 		{
@@ -101,30 +100,25 @@ int main(int argc, char** argv)
 				printUsage();
 				return 0;
 			case '?':
-				std::cerr << std::endl << "Unknown command-line option" << std::endl;
+				printf("Unknown command-line option\n");
 				printUsage();
 				return -1;
 			default:
-				std::cerr << std::endl << "invalid arguments" << std::endl;
+				fprintf(stderr, "Invalud arguments\n");
 				printUsage();
 				return -1;
 		}
 	}
 
-	/*std::cout << "thumbnailSize=" << thumbnailSize << std::endl
-		<< "inputFile=" << inputFile << std::endl
-		<< "outputFile=" << outputFile << std::endl;
-	*/
-
 	if(!inputFile || !outputFile) {
-		std::cout << std::endl << "Invalid runtime arguments given" << std::endl;
+		printf("Invalud runtime arguments given\n");
 		printUsage();
 		return -1;
 	}
 
 	g_type_init();
 	GdkPixbuf *pixbuf;
-	pixbuf = or_gdkpixbuf_extract_thumbnail(inputFile, thumbnailSize);
+	pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(inputFile, thumbnailSize);
 	if(pixbuf == NULL) return -1;
 	if (!save_pixbuf(pixbuf, outputFile, thumbnailSize)) return -1;
 
