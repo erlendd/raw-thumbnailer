@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT(raw-thumbnailer, 0.1, erlend.davidson@gmail.com)
+AC_INIT(raw-thumbnailer, 0.2, erlend.davidson@gmail.com)
 AC_CONFIG_SRCDIR([src/main.c])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
