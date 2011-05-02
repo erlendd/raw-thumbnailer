@@ -1,6 +1,9 @@
 raw-thumbnailer
 
-Version 0.2: Added auto-rotation of iamges to their correct orientation
-	     Now depends on libopenraw >= 0.0.4
+Version 0.2.1: save_pixbuf now returns 1 on success: fixes return code
+               Thank you to Lukasz Stelmach for pointing this out.
 
-Version 0.1: Initial working version
+Version 0.2:   Added auto-rotation of iamges to their correct orientation
+	       Now depends on libopenraw >= 0.0.4
+
+Version 0.1:   Initial working version
