@@ -55,15 +55,15 @@ int save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
 			g_print ("ERROR: Couldn't write the thumbnail '%s': %s\n", path, err->message);
 			g_error_free (err);
 			gdk_pixbuf_unref (small);
-			return 1;
+			return 0;
 		} else {
 			g_print ("ERROR: Couldn't write the thumbnail '%s'\n", path);
 			gdk_pixbuf_unref (small);
-			return 1;
+			return 0;
 		}
 	}
 	gdk_pixbuf_unref (small);
-	return 0;
+	return 1;
 }
 
 void printUsage()
